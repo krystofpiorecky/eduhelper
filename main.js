@@ -41,7 +41,7 @@ function availableAnswerIds()
 {
 	let available_answers = document.querySelectorAll(".answ_text");
 	let output = [];
-	let canswers = answersTextOfQuestion(document.querySelector(".div_task_pad div span").innerText);
+	let answers = answersTextOfQuestion(document.querySelector(".div_task_pad div span").innerText);
 
 	for(let i = 0; i < available_answers.length; i++)
 	{
