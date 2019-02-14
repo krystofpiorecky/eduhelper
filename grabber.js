@@ -1,58 +1,66 @@
+// Číslo aktuální otázky //
 var number_of_question = 1;
-var current_question = parseInt(document.getElementById("div_quest_count_tar").innerHTML.replace("/ ", ""));
-let answersToQuestions = [];
 
-var interval = setInterval(function() {copy_text()}, 500);
+// Číslo poslední otázky //
+var number_of_last_question = parseInt(document.getElementById("div_quest_count_tar").innerHTML.replace("/ ", ""));
 
-function copy_text() {
-		if(number_of_question == current_question) {
-				clearInterval(interval);
-		}
+// Kompletní JSON všech odpovědí a otázek //
+var data = [];
 
-		var question = document.querySelector(".div_task_pad").children[0].children[0].innerHTML.replace(/&nbsp;/gi, "");
-		var right_point = document.querySelector("[title='Správná odpověď']").children[1].innerText;
-		//var answer = correct_answer_by_point(right_point);
+var interval = setInterval(function() {copy_data()}, 500);
 
-		// Vloží do JSON formátu //
-		let atq = {
-			q: question,
-			a: []
-		}
-		console.log(question);
-		atq.a = correct_answer_by_point(right_point);
-		//console.log(JSON.stringify(answer));
-		// Zavolá funkci na zobrazení další otázky //
-		
-		answersToQuestions.push(atq);
-	
-		show_next_question();
+function copy_data() {
+	if(number_of_question == number_of_last_question) {
+		console.log(JSON.stringify(data));
+		clearInterval(interval);
+	}
+
+	// Aktuální otázka //
+	var question = document.querySelector(".div_task_pad div span").innerHTML.replace(/&nbsp;/gi, "");
+
+	// Označení správných otázek //
+	var sign_of_question = document.querySelector("[title='Správná odpověď'] td:nth-child(2)").innerText;;
+
+	var json = {
+		q: question,
+		a: []
+	}
+
+	json.a = right_answer(sign_of_question);
+
+	data.push(json);
+
+	next_question();
 }
 
-function correct_answer_by_point(point) {
-		let answers = [];
-		var count_of_questions = document.querySelectorAll(".div_classic_answer_container").length;
-		var how_many_right_points_are = point.length;
+function right_answer(sign_of_question) {
+	// JSON kam se uloží otázka/otázky //	
+	var answers = [];
 
-		for(var i = 1; i <= how_many_right_points_are; i++) {
-				for(var j = 0; j < count_of_questions; j++) {
-						var current_point_of_question = document.querySelectorAll(".div_classic_answer_container")[j].children[0].children[0].children[0].children[0].children[0].innerText;
-						if(point[i-1] == current_point_of_question) {
-								console.log(document.querySelectorAll(".div_classic_answer_container")[j].children[0].children[0].children[0].children[1].children[0].innerText);
-								answers.push(document.querySelectorAll(".div_classic_answer_container")[j].children[0].children[0].children[0].children[1].children[0].innerText);	
-								break;
-						}
-				}
-				if(how_many_right_points_are == 1) {
-						break;
+	// Počet všech odpovědí //
+	var count_of_answers = document.querySelectorAll(".div_classic_answer_container").length;
+
+	// Počet správných odpovědí //
+	var count_of_sign_of_questions = sign_of_question.length;
+
+	for(var i = 1; i <= count_of_sign_of_questions; i++) {
+		for(var j = 0; j < count_of_answers; j++) {
+			var current_sign_of_question = document.querySelectorAll(".span_class_q_oznaceni")[j].innerText;
+				if(sign_of_question[i-1] == current_sign_of_question) {
+					answers.push(document.querySelectorAll(".answ_text")[j].innerText);	
+					break;
 				}
 		}
-		//return final_answer;
-		console.log(" ");
-	
-		return answers;
+
+		if(count_of_sign_of_questions == 1) {
+			break;
+		}
+	}
+
+	return answers;
 }
 
-function show_next_question() {
-		document.getElementsByClassName("div_btn_op div_btn_q_nbr open_question_display div_main_show_button div_next test_display")[0].click();
+function next_question() {
+		document.querySelector("[onclick='nextPageQuestions()']").click();
 		number_of_question++;
 }
