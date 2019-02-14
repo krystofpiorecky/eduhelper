@@ -6,6 +6,12 @@ let answersToQuestions = [
 		]
 	},
 	{
+		q: "Saved aspect ratio",
+		a: [
+			"udává poměr stran uloženého obrazu"
+		]
+	},
+	{
 		q: "V systému 4:1:1 (které v používají formáty DV/DVCAM a DVCPRO) jsou:",
 		a: [
 			"barevná data v tomto případě vzorkována se čtvrtinovou frekvencí než u iluminační složky (pro každý čtvrtý pixel) a výsledkem je tudíž pouze 180 barevných vzorků v rozlišení se 720 body na řádek"
